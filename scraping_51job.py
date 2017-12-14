@@ -10,21 +10,26 @@ def get_content(page):
     html = a.read().decode('gbk')
     return html
 
-def get_bsObj(html):
-    """获取bsObj对象"""
-    bsObj = BeautifulSoup(html, "lxml")
-    return bsObj
+# def get_bsObj(html):
+#     """获取bsObj对象"""
+#     bsObj = BeautifulSoup(html, "lxml")
+#     return bsObj
 
 def get_position(html):
     reg = re.compile(r'class="t1 ">.*? <a target="_blank" title="(.*?)".*? <span class="t2"><a target="_blank" title="(.*?)".*?<span class="t3">(.*?)</span>.*?<span class="t4">(.*?)</span>.*? <span class="t5">(.*?)</span>',re.S)
     items = re.findall(reg, html)
     # for i in items:
     #     print(i[0]+'\t'+i[1]+'\t'+i[2]+'\t'+i[3]+'\t'+i[4]+'\n')
+    black_list = ['杭州仟闰科技有限公司']
+    for i in items[:]:
+        if i[1] in black_list:
+            items.remove(i)
     return items
 
 # 这里操作的是bsObj对象
-def get_num_position(bsObj):
+def get_num_position(html):
     """获取一共有多少职位"""
+    bsObj = BeautifulSoup(html, "lxml")
     num_positon = bsObj.find("div", {"class":"rt"})
     return(num_positon.get_text().strip())
 
@@ -43,10 +48,11 @@ def get_num_page(html):
 # 将结果输出到excel
 def excel_write(items,index):
     # 爬取到的内容写入excel表格
+    style = xlwt.easyxf('font: name 微软雅黑')
     for item in items: # 职位信息
         for i in range(0,5):
             # print item[i]
-            ws.write(index,i,item[i], xlwt.easyxf('font: name 微软雅黑')) # 行，列，数据
+            ws.write(index,i,item[i], style) # 行，列，数据
         # print(index)
         index+=1
 
@@ -54,10 +60,13 @@ def excel_write(items,index):
 # url = "http://search.51job.com/jobsearch/search_result.php?fromJs=1&jobarea=080200&keyword=%E8%BD%AF%E4%BB%B6%E6%B5%8B%E8%AF%95"
 html = get_content("1")
 num_page = int(get_num_page(html))
-for page in range(1, num_page):
-    print("正在爬取" + str(page) + "页数据...")
-    content = get_content(str(page))
-    get_position(content)
+num_positon = get_num_position(html)
+
+print("一共有" + str(num_page) + "页, " + num_positon + "个岗位")
+# for page in range(1, num_page):
+#     print("正在爬取" + str(page) + "页数据...")
+#     content = get_content(str(page))
+#     get_position(content)
 
 wb = xlwt.Workbook()
 ws = wb.add_sheet('A Test Sheet')
@@ -66,6 +75,7 @@ for column in range(0, 5):
     ws.write(0, column, headData[column], xlwt.easyxf('font: name 微软雅黑, bold on')) # 行，列
 
 for i in range(1, num_page):
+    print("正在爬取" + str(i) + "页数据...")
     index = (i - 1) * 50 + 1
     excel_write(get_position(get_content(str(i))), index)
-wb.save('result1.xls')
+wb.save('result3.xls')
