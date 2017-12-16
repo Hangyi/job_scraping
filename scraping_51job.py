@@ -78,4 +78,4 @@ for i in range(1, num_page):
     print("正在爬取" + str(i) + "页数据...")
     index = (i - 1) * 50 + 1
     excel_write(get_position(get_content(str(i))), index)
-wb.save('result3.xls')
+wb.save('result.xls')
