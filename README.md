@@ -3,9 +3,15 @@ some_scripts
 
 一些用Python写的小脚本
 
+
+
 <style> table th:first-of-type { width: 10px; } </style>
 
+
+
 <style>table tr:hover {background: #efefef; }</style>
+
+
 
 | NO.  | Title                                 | Function        |
 | ---- | ------------------------------------- | --------------- |
