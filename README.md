@@ -3,8 +3,6 @@ some_scripts
 
 一些用Python写的小脚本
 
-<style> table th:first-of-type { width: 10px;  }  tr :hover {background: #efefef; }</style>
-
 | NO.  | Title                                 | Function        |
 | ---- | ------------------------------------- | --------------- |
 | 0    | [job_scraping](001job_scraping)       | 51职位查询爬虫        |
