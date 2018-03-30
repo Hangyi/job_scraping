@@ -1,4 +1,4 @@
-# formFiler.py - Automatically fills in the form.
+# formFiller.py - Automatically fills in the form.
 
 import pyautogui, time
 
